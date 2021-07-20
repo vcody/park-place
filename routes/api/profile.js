@@ -43,7 +43,6 @@ router.post('/', [ auth, [
         status,
         interests,
         bio,
-        // Might need to change visited_parks ...
         // visited_parks,
         twitter,
         facebook,
@@ -140,6 +139,70 @@ router.delete('/', auth, async (req, res) => {
         await User.findOneAndRemove({ _id: req.user.id });
 
         res.json({ msg: 'User deleted'});
+    } catch(error) {
+        console.error(error.message);
+        res.status(500).send('Server error');
+    }
+});
+
+// @route  PUT api/profile/parkExperience
+// @desc   Add profile park experience
+// @access Private
+router.put('/parkExperience', [auth, [
+    check('name', 'Name is required').not().isEmpty(),
+    check('location', 'Location is required').not().isEmpty(),
+    check('image', 'Image is required').not().isEmpty(),
+    check('from', 'From date is required').not().isEmpty()
+]], async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { 
+        name,
+        location,
+        image,
+        from,
+        to,
+    } = req.body;
+
+    const newParkExperience = {
+        name,
+        location,
+        image,
+        from,
+        to,
+    }
+
+    try {
+        const profile = await Profile.findOne({ user: req.user.id });
+
+        profile.visited_parks.unshift(newParkExperience);
+        await profile.save();
+
+        res.json(profile);
+    } catch(error) {
+        console.error(error.message);
+        res.status(500).send('Server error');
+    }
+});
+
+// @route  DELETE api/profile/experience/:exp_id
+// @desc   Delete parkExperience by ID
+// @access Private
+router.delete('/parkExperience/:exp_id', auth, async (req, res) => {
+    try {
+        const profile = await Profile.findOne({ user: req.user.id });
+
+        // Get remove index
+        const removeIndex = profile.visited_parks.map(item => item.id).indexOf(req.params.exp_id);
+        profile.visited_parks.splice(removeIndex, 1);
+
+        await profile.save();
+
+        res.json(profile);
     } catch(error) {
         console.error(error.message);
         res.status(500).send('Server error');
