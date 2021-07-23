@@ -1,10 +1,10 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createProfile } from '../../actions/profile';
+import { createProfile, getCurrentProfile } from '../../actions/profile';
 
-const CreateProfile = ({ createProfile, history }) => {
+const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentProfile, history }) => {
     const [formData, setFormData] = useState({
         // Add profile details minus experiences ...
         // Profile: user, location, status, interests, bio, visited_parks, social, date
@@ -18,6 +18,20 @@ const CreateProfile = ({ createProfile, history }) => {
     });
 
     const [displaySocialInputs, toggleSocialInputs] = useState(false);
+
+    useEffect(() => {
+        getCurrentProfile();
+
+        setFormData({ 
+            location: loading || !profile.location ? '' : profile.location,
+            status: loading || !profile.status ? '' : profile.status,
+            interests: loading || !profile.interests ? '' : profile.interests.join(','),
+            bio: loading || !profile.bio ? '' : profile.bio,
+            twitter: loading || !profile.twitter ? '' : profile.twitter,
+            facebook: loading || !profile.facebook ? '' : profile.facebook,
+            instagram: loading || !profile.instagram ? '' : profile.instagram,
+        });
+    }, [loading]);
 
     const {
         location,
@@ -33,7 +47,7 @@ const CreateProfile = ({ createProfile, history }) => {
 
     const onSubmit = e => {
         e.preventDefault();
-        createProfile(formData, history);
+        createProfile(formData, history, true);
     }
 
     return (
@@ -127,8 +141,14 @@ const CreateProfile = ({ createProfile, history }) => {
     )
 };
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
     createProfile: PropTypes.func.isRequired,
+    profile: PropTypes.object.isRequired,
+    getCurrentProfile: PropTypes.func.isRequired,
 };
 
-export default connect(null, { createProfile })(withRouter(CreateProfile));
+const mapStateToProps = state => ({
+    profile: state.profile
+});
+
+export default connect(mapStateToProps, { createProfile, getCurrentProfile })(withRouter(EditProfile));

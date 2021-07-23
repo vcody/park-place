@@ -39,7 +39,7 @@ export const createProfile = (formData, history, edit = false) => async dispatch
             payload: res.data
         });
 
-        dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created'));
+        dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success'));
 
         if (!edit) {
             history.push('/dashboard');
@@ -50,7 +50,7 @@ export const createProfile = (formData, history, edit = false) => async dispatch
         if (errors) {
             errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
         }
-        
+
         dispatch({
             type: PROFILE_ERROR,
             payload: { msg: error.response.statusText, status: error.response.status }
