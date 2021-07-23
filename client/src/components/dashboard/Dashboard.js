@@ -5,6 +5,7 @@ import { getCurrentProfile } from '../../actions/profile';
 import Spinner from '../layout/Spinner';
 import { Link } from 'react-router-dom';
 import DashboardActions from './DashboardActions';
+import Experience from './Experience';
 
 const Dashboard = ({ getCurrentProfile, 
     auth: { user }, 
@@ -26,6 +27,7 @@ const Dashboard = ({ getCurrentProfile,
             { profile !== null ? 
             <Fragment>
                 <DashboardActions />
+                <Experience experience={ profile.visited_parks }/>
             </Fragment> : 
             <Fragment>
                 <p>You have not yet set up a profile. Please add some info.</p>
