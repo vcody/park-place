@@ -5,6 +5,8 @@ import {
     GET_PROFILE,
     PROFILE_ERROR,
     UPDATE_PROFILE,
+    CLEAR_PROFILE,
+    DELETE_ACCOUNT,
 } from './types';
 
 // Get the current users profile
@@ -75,7 +77,7 @@ export const addExperience = (formData, history) => async dispatch => {
             payload: res.data
         });
 
-        dispatch(setAlert('Experience added', 'success'));
+        dispatch(setAlert('Experience Added', 'success'));
         history.push('/dashboard');
     } catch(error) {
         const errors = error.response.data.errors;
@@ -89,4 +91,46 @@ export const addExperience = (formData, history) => async dispatch => {
             payload: { msg: error.response.statusText, status: error.response.status }
         });
     }
+}
+
+// Delete experience
+export const deleteExperience = id => async dispatch => {
+    try {
+        const res = await axios.delete(`/api/profile/parkExperience/${id}`);
+
+        dispatch({
+            type: UPDATE_PROFILE,
+            payload: res.data
+        });
+
+        dispatch(setAlert('Experience Removed', 'success'));
+    } catch(error) {
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: { msg: error.response.statusText, status: error.response.status }
+        });
+    }
+}
+
+// Delete account/profile
+export const deleteAccount = () => async dispatch => {
+    if (window.confirm('Are you sure? This cannot be undone')) { 
+        try {
+            const res = await axios.delete('/api/profile/');
+
+            dispatch({
+                type: CLEAR_PROFILE,
+            });
+            dispatch({
+                type: DELETE_ACCOUNT,
+            });
+
+            dispatch(setAlert('Your account has been successfully deleted'));
+        } catch(error) {
+            dispatch({
+                type: PROFILE_ERROR,
+                payload: { msg: error.response.statusText, status: error.response.status }
+            });
+        }
+    };
 }
