@@ -31,7 +31,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
             facebook: loading || !profile.facebook ? '' : profile.facebook,
             instagram: loading || !profile.instagram ? '' : profile.instagram,
         });
-    }, [loading]);
+    }, [loading, getCurrentProfile]);
 
     const {
         location,
