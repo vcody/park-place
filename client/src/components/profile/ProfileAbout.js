@@ -21,7 +21,7 @@ const ProfileAbout = ({ profile: {
           <div class="interests">
             { interests.map((interest, index) => (
                 <Fragment key={index} className="p-1">
-                    {" "}<i className="fas fa-check" /> { interest }
+                    {" "}<i className="fas fa-check-circle" /> { interest }
                 </Fragment>
             ))}
           </div>

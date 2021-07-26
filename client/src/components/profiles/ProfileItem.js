@@ -14,7 +14,7 @@ const ProfileItem = ({ profile: {
             <div>
                 <h2>{name}</h2>
                 <p>{status}</p>
-                <p className="my-1"> {location && <span>{location}</span>}</p>
+                <p className="my-1"> {location && <span><i className="fas fa-location-arrow"></i>{' ' + location}</span>}</p>
                 <Link to={`/profile/${_id}`} className="btn btn-primary">
                     View Profile
                 </Link>
@@ -22,7 +22,7 @@ const ProfileItem = ({ profile: {
             <ul>
                 { interests.slice(0, 4).map((interest, index) => (
                     <li key={index} className="text-primary">
-                        <i className="fas fa-check"></i> {interest}
+                        <i className="fas fa-check-circle"></i> {interest}
                     </li>
                 )) }
             </ul>
