@@ -17,12 +17,12 @@ const ProfileAbout = ({ profile: {
                     <div class="line"></div>
                 </Fragment>
             )}
-          <h2 class="text-primary">Skill Set</h2>
+          <h2 class="text-primary">Interests</h2>
           <div class="interests">
             { interests.map((interest, index) => (
-                <div key={index} className="p-1">
-                    <i className="fas fa-check" />{ interest }
-                </div>
+                <Fragment key={index} className="p-1">
+                    {" "}<i className="fas fa-check" /> { interest }
+                </Fragment>
             ))}
           </div>
         </div>

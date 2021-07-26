@@ -58,18 +58,12 @@ export default function(state = initialState, action) {
                 loading: false
             };
         case ADD_COMMENT:
-            console.log(state)
-            console.log(state.post)
-            console.log(state.post.comments)
             return {
                 ...state,
                 post: { ...state.post, comments: payload },
                 loading: false
             };
         case REMOVE_COMMENT:
-            console.log(state)
-            console.log(state.post)
-            console.log(state.post.comments)
             return {
 
                 ...state,
